@@ -1,2 +1,1 @@
-# NoteLedgeYourKnowLedge
-Module 11_ A note taking app: NoteLedge your knowLedge
+# Note Taker Starter Code
