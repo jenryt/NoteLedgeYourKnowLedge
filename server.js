@@ -54,12 +54,28 @@ app.post("/api/notes", (req, res) => {
 });
 
 //DELETE /api/notes/:id should receive a query parameter containing the id of a note to delete. In order to delete a note, you'll need to read all notes from the db.json file, remove the note with the given id property, and then rewrite the notes to the db.json file.
-app.delete("/api/notes/:id", (req, res) => {});
+app.delete("/api/notes/:id", (req, res) => {
+  const id = req.params.id;
+  fs.readFile(`${__dirname}/db/db.json`, "utf8", (err, notes) => {
+    if (err) {
+      return res.status(500).json({ err });
+    }
+    const result = JSON.parse(notes).filter((e) => e.id !== id);
+
+    fs.writeFile(`${__dirname}/db/db.json`, JSON.stringify(result), (err) => {
+      if (err) {
+        res.status(500);
+        console.log("something went wrong!", err);
+      }
+      console.log(`Note ${id} has been deleted!`);
+    });
+  });
+});
 
 // GET * should return the index.html file.
 // a catch-all route that's used as fall back, so should be the last route being defined
-app.get("*", (res, req) => {
-  res.sendFile(path.join(__dirname, "/public"));
+app.get("*", (req, res) => {
+  res.sendFile(`${__dirname}/public`);
 });
 
 app.listen(process.env.PORT, () =>
