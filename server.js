@@ -64,10 +64,10 @@ app.delete("/api/notes/:id", (req, res) => {
 
     fs.writeFile(`${__dirname}/db/db.json`, JSON.stringify(result), (err) => {
       if (err) {
-        res.status(500);
-        console.log("something went wrong!", err);
+        return res.status(500).json({ err });
       }
       console.log(`Note ${id} has been deleted!`);
+      res.sendStatus(204);
     });
   });
 });
